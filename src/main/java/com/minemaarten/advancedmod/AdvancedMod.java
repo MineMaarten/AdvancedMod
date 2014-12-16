@@ -1,5 +1,6 @@
 package com.minemaarten.advancedmod;
 
+import com.minemaarten.advancedmod.init.ModBlocks;
 import com.minemaarten.advancedmod.proxy.CommonProxy;
 import com.minemaarten.advancedmod.reference.Reference;
 import com.minemaarten.advancedmod.utility.Log;
@@ -20,6 +21,7 @@ public class AdvancedMod{
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
+        ModBlocks.init();
         proxy.preInit();
         Log.info("Pre Initialization Complete!");
     }
