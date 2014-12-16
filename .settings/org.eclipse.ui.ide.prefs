@@ -1,0 +1,12 @@
+IMPORT_FILES_AND_FOLDERS_MODE=prompt
+IMPORT_FILES_AND_FOLDERS_RELATIVE=true
+IMPORT_FILES_AND_FOLDERS_TYPE=23,1\:7,1
+IMPORT_FILES_AND_FOLDERS_VIRTUAL_FOLDER_MODE=prompt
+PROBLEMS_FILTERS_MIGRATE=true
+SAVE_ALL_BEFORE_BUILD=true
+TASKS_FILTERS_MIGRATE=true
+eclipse.preferences.version=1
+org.eclipse.ui.internal.views.markers.CachedMarkerBuilderorg.eclipse.ui.views.TaskList=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<filterGroups andFilters\="false" markerLimit\="100" markerLimitEnabled\="true">\r\n<filterGroup IMemento.internal.id\="TODOs" enabled\="false" filterLimit\="-1" scope\="2" workingSet\="Aggregate for window 1401044629811">\r\n<fieldFilter IMemento.internal.id\="org.eclipse.ui.ide.completionField" completion\="3"/>\r\n<fieldFilter IMemento.internal.id\="org.eclipse.ui.ide.priorityField" selectedPriorities\="7"/>\r\n<fieldFilter IMemento.internal.id\="org.eclipse.ui.ide.descriptionField" containsModifier\="CONTAINS" containsText\="TODO"/>\r\n<fieldFilter IMemento.internal.id\="org.eclipse.ui.ide.markerType"/>\r\n</filterGroup>\r\n</filterGroups>
+platformState=1417526771779
+quickStart=false
+tipsAndTricks=true
