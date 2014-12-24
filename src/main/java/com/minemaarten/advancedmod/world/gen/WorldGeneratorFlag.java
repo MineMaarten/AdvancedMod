@@ -54,10 +54,7 @@ public class WorldGeneratorFlag implements IWorldGenerator{
             int randZ = z + random.nextInt(16);
             int randY = world.getHeightValue(randX, randZ);
 
-            if (randY >= (world.getHeight() - maxHeight))
-                return;
-
-            if(world.getBiomeGenForCoords(randX, randZ) != BiomeGenBase.river && world.getBiomeGenForCoords(randX, randZ) != BiomeGenBase.ocean) {
+            if(randY <= (world.getHeight() - maxHeight) && world.getBiomeGenForCoords(randX, randZ) != BiomeGenBase.river && world.getBiomeGenForCoords(randX, randZ) != BiomeGenBase.ocean) {
                 Block block = world.getBlock(randX, randY - 1, randZ);
                 //if(block != Blocks.water && block != Blocks.lava && block != Blocks.flowing_water && block != Blocks.flowing_lava) {
                 if (!(block instanceof BlockLiquid || FluidRegistry.lookupFluidForBlock(block) != null)) {
