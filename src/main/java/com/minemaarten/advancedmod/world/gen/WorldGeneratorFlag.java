@@ -19,7 +19,7 @@ public class WorldGeneratorFlag implements IWorldGenerator{
 
     private final WorldGenMinable flagGen = new WorldGenMinable(ModBlocks.dutchFlag, 32);
 
-    int maxHeight = 10;         //The height of the flag to generate, must be more than 3
+    private static final int FLAG_HEIGHT_POLE = 10;         //The height of the flag to generate, must be more than 3
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider){
@@ -54,7 +54,7 @@ public class WorldGeneratorFlag implements IWorldGenerator{
             int randZ = z + random.nextInt(16);
             int randY = world.getHeightValue(randX, randZ);
 
-            if(randY <= (world.getHeight() - maxHeight) && world.getBiomeGenForCoords(randX, randZ) != BiomeGenBase.river && world.getBiomeGenForCoords(randX, randZ) != BiomeGenBase.ocean) {
+            if(randY <= (world.getHeight() - FLAG_HEIGHT_POLE) && world.getBiomeGenForCoords(randX, randZ) != BiomeGenBase.river && world.getBiomeGenForCoords(randX, randZ) != BiomeGenBase.ocean) {
                 Block block = world.getBlock(randX, randY - 1, randZ);
                 //if(block != Blocks.water && block != Blocks.lava && block != Blocks.flowing_water && block != Blocks.flowing_lava) {
                 if (!(block instanceof BlockLiquid || FluidRegistry.lookupFluidForBlock(block) != null)) {
@@ -72,12 +72,12 @@ public class WorldGeneratorFlag implements IWorldGenerator{
     }
 
     private void generateFlag(World world, int x, int y, int z){
-        for(int i = 0; i < maxHeight; i++) {
+        for(int i = 0; i < FLAG_HEIGHT_POLE; i++) {
             world.setBlock(x, y + i, z, Blocks.fence, 0, 2);
         }
         for(int dx = 0; dx < 3; dx++) {
             for(int dy = 0; dy < 3; dy++) {
-                world.setBlock(x + 1 + dx, y + (maxHeight - 3) + dy, z, ModBlocks.dutchFlag, 0, 2);
+                world.setBlock(x + 1 + dx, y + (FLAG_HEIGHT_POLE - 3) + dy, z, ModBlocks.dutchFlag, 0, 2);
             }
         }
     }
