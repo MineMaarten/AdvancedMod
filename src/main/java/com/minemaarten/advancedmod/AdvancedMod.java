@@ -1,6 +1,8 @@
 package com.minemaarten.advancedmod;
 
 import com.minemaarten.advancedmod.init.ModBlocks;
+import com.minemaarten.advancedmod.init.ModTileEntities;
+import com.minemaarten.advancedmod.network.DescriptionHandler;
 import com.minemaarten.advancedmod.network.NetworkHandler;
 import com.minemaarten.advancedmod.proxy.CommonProxy;
 import com.minemaarten.advancedmod.reference.Reference;
@@ -25,9 +27,11 @@ public class AdvancedMod{
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
         ModBlocks.init();
+        ModTileEntities.init();
         proxy.preInit();
         GameRegistry.registerWorldGenerator(new WorldGeneratorFlag(), 0);
         NetworkHandler.init();
+        DescriptionHandler.init();
         Log.info("Pre Initialization Complete!");
     }
 
