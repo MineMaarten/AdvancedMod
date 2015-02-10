@@ -11,6 +11,7 @@ import com.minemaarten.advancedmod.utility.Names;
 public class BlockDutchFlag extends BlockAdvancedMod{
 
     public BlockDutchFlag(){
+        super();
         setBlockName(Names.Blocks.DUTCH_FLAG);
         setBlockTextureName(Reference.MOD_ID_LOWER + ":" + Names.Blocks.DUTCH_FLAG);
         setTickRandomly(true);

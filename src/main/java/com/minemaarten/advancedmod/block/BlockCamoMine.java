@@ -21,6 +21,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockCamoMine extends BlockAdvancedModTileEntity{
 
     public BlockCamoMine(){
+        super();
         setBlockName(Names.Blocks.CAMO_MINE);
         setBlockTextureName(Reference.MOD_ID_LOWER + ":" + Names.Blocks.DUTCH_FLAG);
     }
