@@ -1,6 +1,7 @@
 package com.minemaarten.advancedmod.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -33,21 +34,23 @@ public class BlockCamoMine extends BlockAdvancedModTileEntity{
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ){
         if(!world.isRemote) {
-            player.openGui(AdvancedMod.instance, GuiHandler.GuiIDs.CAMO_MINE.ordinal(), world, x, y, z);
-
-            /* TileEntityCamoMine te = (TileEntityCamoMine)world.getTileEntity(x, y, z);
-             if(te.getCamouflage(side) != null) {
-                 ItemStack camoStack = te.getCamouflage(side);
-                 te.setCamouflage(null, side);
-                 EntityItem itemEntity = new EntityItem(world, x, y, z, camoStack);
-                 world.spawnEntityInWorld(itemEntity);
-             } else {
-                 ItemStack playerItem = player.getCurrentEquippedItem();
-                 if(playerItem != null) {
-                     ItemStack camoStack = playerItem.splitStack(1);
-                     te.setCamouflage(camoStack, side);
-                 }
-             }*/
+            if(player.isSneaking()) {
+                player.openGui(AdvancedMod.instance, GuiHandler.GuiIDs.CAMO_MINE.ordinal(), world, x, y, z);
+            } else {
+                TileEntityCamoMine te = (TileEntityCamoMine)world.getTileEntity(x, y, z);
+                if(te.getCamouflage(side) != null) {
+                    ItemStack camoStack = te.getCamouflage(side);
+                    te.setCamouflage(null, side);
+                    EntityItem itemEntity = new EntityItem(world, x, y, z, camoStack);
+                    world.spawnEntityInWorld(itemEntity);
+                } else {
+                    ItemStack playerItem = player.getCurrentEquippedItem();
+                    if(playerItem != null) {
+                        ItemStack camoStack = playerItem.splitStack(1);
+                        te.setCamouflage(camoStack, side);
+                    }
+                }
+            }
         }
         return true;
     }

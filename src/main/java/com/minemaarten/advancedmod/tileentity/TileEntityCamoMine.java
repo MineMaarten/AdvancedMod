@@ -19,6 +19,7 @@ import cpw.mods.fml.common.network.ByteBufUtils;
 
 public class TileEntityCamoMine extends TileEntityAdvancedMod implements ISidedInventory{
     private int timer = 60;
+    private String target = "";
     private ItemStack[] camoStacks = new ItemStack[6];
 
     @Override
@@ -26,8 +27,48 @@ public class TileEntityCamoMine extends TileEntityAdvancedMod implements ISidedI
         if(timer > 0) timer--;
         if(timer == 0 && !worldObj.isRemote) {
             List<Entity> entities = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord - 1, zCoord - 1, xCoord + 2, yCoord + 2, zCoord + 2));
-            if(entities.size() > 0) {
-                worldObj.createExplosion(null, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 3.0F, true);
+            for(Entity entity : entities) {
+                if(target.equals("") || entity.getCommandSenderName().equalsIgnoreCase(target)) {
+                    worldObj.createExplosion(null, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 3.0F, true);
+                    break;
+                }
+            }
+        }
+    }
+
+    public String getTarget(){
+        return target;
+    }
+
+    public void setTarget(String target){
+        this.target = target;
+        markDirty();
+    }
+
+    @Override
+    public void onGuiTextfieldUpdate(int id, String text){
+        if(id == 0) {
+            target = text;
+            markDirty();
+        }
+    }
+
+    public void setTimer(int value){
+        timer = value;
+        markDirty();
+    }
+
+    public int getTimer(){
+        return timer;
+    }
+
+    @Override
+    public void onGuiButtonPress(int id){
+        if(id == 0) {
+            if(timer == -1) {//if not armed, start arming.
+                timer = 60;
+            } else { //if armed, stop being armed.
+                timer = -1;
             }
         }
     }
@@ -57,6 +98,7 @@ public class TileEntityCamoMine extends TileEntityAdvancedMod implements ISidedI
     public void readFromNBT(NBTTagCompound tag){
         super.readFromNBT(tag);
         timer = tag.getInteger("timer");
+        target = tag.getString("target");
 
         camoStacks = new ItemStack[6];
         NBTTagList camoStackTag = tag.getTagList("camoStacks", 10);
@@ -74,6 +116,7 @@ public class TileEntityCamoMine extends TileEntityAdvancedMod implements ISidedI
     public void writeToNBT(NBTTagCompound tag){
         super.writeToNBT(tag);
         tag.setInteger("timer", timer);
+        tag.setString("target", target);
 
         NBTTagList camoStackTag = new NBTTagList();
         for(int i = 0; i < camoStacks.length; i++) {
