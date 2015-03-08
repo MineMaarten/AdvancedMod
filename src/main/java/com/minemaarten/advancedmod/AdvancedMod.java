@@ -1,5 +1,8 @@
 package com.minemaarten.advancedmod;
 
+import net.minecraftforge.common.MinecraftForge;
+
+import com.minemaarten.advancedmod.event.AdvancedModEventHandler;
 import com.minemaarten.advancedmod.init.ModBlocks;
 import com.minemaarten.advancedmod.init.ModTileEntities;
 import com.minemaarten.advancedmod.network.DescriptionHandler;
@@ -9,6 +12,7 @@ import com.minemaarten.advancedmod.reference.Reference;
 import com.minemaarten.advancedmod.utility.Log;
 import com.minemaarten.advancedmod.world.gen.WorldGeneratorFlag;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -34,6 +38,8 @@ public class AdvancedMod{
         NetworkHandler.init();
         DescriptionHandler.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+        MinecraftForge.EVENT_BUS.register(new AdvancedModEventHandler());//For registering events from the net.miencraftforge.event package.
+        FMLCommonHandler.instance().bus().register(new AdvancedModEventHandler());//For registering events from the cpw.mods.fml.gameevent package.
         Log.info("Pre Initialization Complete!");
     }
 
