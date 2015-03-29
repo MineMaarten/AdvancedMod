@@ -2,6 +2,7 @@ package com.minemaarten.advancedmod.tileentity;
 
 import io.netty.buffer.ByteBuf;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -21,6 +22,7 @@ public class TileEntityCamoMine extends TileEntityAdvancedMod implements ISidedI
     private int timer = 60;
     private String target = "";
     private ItemStack[] camoStacks = new ItemStack[6];
+    public static List<ItemStack> camouflageBlacklist = new ArrayList<ItemStack>();
 
     @Override
     public void updateEntity(){
@@ -249,6 +251,9 @@ public class TileEntityCamoMine extends TileEntityAdvancedMod implements ISidedI
      */
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack){
+        for(ItemStack blacklistedStack : camouflageBlacklist) {
+            if(blacklistedStack.isItemEqual(stack)) return false;
+        }
         return stack != null && stack.getItem() instanceof ItemBlock;
     }
 

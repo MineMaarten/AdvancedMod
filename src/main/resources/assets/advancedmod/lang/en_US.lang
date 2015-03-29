@@ -8,3 +8,8 @@ gui.advancedMod.camoMine.target=Target:
 gui.advancedMod.camoMine.timer=Timer: %s ticks
 gui.advancedMod.camoMine.button.reset=Reset
 gui.advancedMod.camoMine.button.restart=Restart
+
+advancedMod.waila.camoMine.target=Target:
+advancedMod.waila.camoMine.notPrimed=Not primed
+advancedMod.waila.camoMine.primed=Primed
+advancedMod.waila.camoMine.primingIn=Priming in:
