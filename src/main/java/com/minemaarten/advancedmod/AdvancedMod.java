@@ -47,6 +47,7 @@ public class AdvancedMod{
         MinecraftForge.EVENT_BUS.register(new AdvancedModEventHandler());//For registering events from the net.miencraftforge.event package.
         FMLCommonHandler.instance().bus().register(new AdvancedModEventHandler());//For registering events from the cpw.mods.fml.gameevent package.
         FMLInterModComms.sendMessage(Reference.MOD_ID, "camoMineBlacklist", new ItemStack(Blocks.stone));
+        FMLInterModComms.sendMessage("Waila", "register", "com.minemaarten.advancedmod.thirdparty.waila.Waila.onWailaCall");
         Log.info("Pre Initialization Complete!");
     }
 
