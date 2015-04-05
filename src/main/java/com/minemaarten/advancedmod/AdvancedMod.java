@@ -3,6 +3,9 @@ package com.minemaarten.advancedmod;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
 
 import com.minemaarten.advancedmod.event.AdvancedModEventHandler;
 import com.minemaarten.advancedmod.init.ModBlocks;
@@ -16,7 +19,9 @@ import com.minemaarten.advancedmod.utility.Log;
 import com.minemaarten.advancedmod.world.gen.WorldGeneratorFlag;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
@@ -49,6 +54,15 @@ public class AdvancedMod{
         FMLInterModComms.sendMessage(Reference.MOD_ID, "camoMineBlacklist", new ItemStack(Blocks.stone));
         FMLInterModComms.sendMessage("Waila", "register", "com.minemaarten.advancedmod.thirdparty.waila.Waila.onWailaCall");
         Log.info("Pre Initialization Complete!");
+
+        if(Loader.isModLoaded("Thaumcraft")) {
+            loadThaumcraft();
+        }
+    }
+
+    @Optional.Method(modid = "Thaumcraft")
+    private void loadThaumcraft(){
+        ThaumcraftApi.registerObjectTag(new ItemStack(ModBlocks.dutchFlag), new AspectList().add(Aspect.AIR, 5));
     }
 
     @Mod.EventHandler

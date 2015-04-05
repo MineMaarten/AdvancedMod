@@ -1,5 +1,5 @@
 #
-#Sun Mar 29 14:53:31 CEST 2015
+#Sun Apr 05 18:30:32 CEST 2015
 org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_for=do not insert
 org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_anonymous_type_declaration=do not insert
 org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_try=do not insert
@@ -60,8 +60,8 @@ org.eclipse.jdt.core.codeComplete.localSuffixes=
 org.eclipse.jdt.core.formatter.insert_space_before_parenthesized_expression_in_throw=do not insert
 org.eclipse.jdt.core.formatter.alignment_for_throws_clause_in_method_declaration=0
 org.eclipse.jdt.core.codeComplete.localPrefixes=
-org.eclipse.jdt.core.formatter.lineSplit=120
 org.eclipse.jdt.core.formatter.alignment_for_arguments_in_allocation_expression=0
+org.eclipse.jdt.core.formatter.lineSplit=120
 org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
 org.eclipse.jdt.core.compiler.compliance=1.6
 org.eclipse.jdt.core.codeComplete.staticFieldPrefixes=
@@ -71,6 +71,6 @@ org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_array_initia
 org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_enum_constant=do not insert
 org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_if=do not insert
 org.eclipse.jdt.core.compiler.problem.uncheckedTypeOperation=ignore
-org.eclipse.jdt.core.formatter.tabulation.char=space
 org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_annotation_type_declaration=do not insert
+org.eclipse.jdt.core.formatter.tabulation.char=space
 org.eclipse.jdt.core.codeComplete.staticFieldSuffixes=
