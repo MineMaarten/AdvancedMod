@@ -23,7 +23,7 @@ public class BlockCamoMine extends BlockAdvancedModTileEntity{
 
     public BlockCamoMine(){
         setBlockName(Names.Blocks.CAMO_MINE);
-        setBlockTextureName(Reference.MOD_ID_LOWER + ":" + Names.Blocks.DUTCH_FLAG);
+        setBlockTextureName(Reference.MOD_ID_LOWER + ":" + Names.Blocks.CAMO_MINE);
     }
 
     @Override
