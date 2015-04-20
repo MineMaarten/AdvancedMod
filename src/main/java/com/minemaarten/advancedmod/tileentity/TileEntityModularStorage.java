@@ -1,22 +1,111 @@
 package com.minemaarten.advancedmod.tileentity;
 
 import io.netty.buffer.ByteBuf;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import com.minemaarten.advancedmod.init.ModBlocks;
+import com.minemaarten.advancedmod.utility.Log;
 
 public class TileEntityModularStorage extends TileEntityAdvancedMod implements IInventory{
 
     private static final int SLOTS_PER_BLOCK = 1;
     private ItemStack[] inventory = new ItemStack[SLOTS_PER_BLOCK];
 
+    private TileEntityModularStorage master;
+    private boolean isMaster;
+    private boolean firstRun = true;
+
+    public boolean isMaster(){
+        return isMaster;
+    }
+
+    public TileEntityModularStorage getMaster(){
+        initializeMultiblockIfNecessary();
+        return master;
+    }
+
+    private void setMaster(TileEntityModularStorage master, int storages){
+        this.master = master;
+        boolean wasMaster = isMaster;
+        isMaster = master == this;
+        if(isMaster) {
+            Log.info("Master set to " + storages + " blocks");
+            ItemStack[] newInventory = new ItemStack[SLOTS_PER_BLOCK * storages];
+            for(int i = 0; i < inventory.length; i++) {
+                if(i < newInventory.length) {
+                    newInventory[i] = inventory[i];
+                } else if(inventory[i] != null) {
+                    worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord, yCoord, zCoord, inventory[i]));
+                }
+            }
+            inventory = newInventory;
+        } else if(!isMaster && wasMaster) {
+            for(ItemStack stack : inventory) {
+                if(stack != null) worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord, yCoord, zCoord, stack));
+            }
+        }
+    }
+
     @Override
     public void updateEntity(){
+        super.updateEntity();
+        if(firstRun) {
+            initializeMultiblockIfNecessary();
+            firstRun = false;
+        }
+    }
 
+    @Override
+    public void invalidate(){
+        super.invalidate();
+        for(ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+            TileEntity te = worldObj.getTileEntity(xCoord + d.offsetX, yCoord + d.offsetY, zCoord + d.offsetZ);
+            if(te instanceof TileEntityModularStorage) {
+                ((TileEntityModularStorage)te).master = null;
+                ((TileEntityModularStorage)te).initializeMultiblockIfNecessary();
+            }
+        }
+        for(ItemStack stack : inventory) {
+            if(stack != null) worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord, yCoord, zCoord, stack));
+        }
+    }
+
+    private void initializeMultiblockIfNecessary(){
+        if(master == null || master.isInvalid()) {
+            List<TileEntityModularStorage> connectedStorages = new ArrayList<TileEntityModularStorage>();
+            Stack<TileEntityModularStorage> traversingStorages = new Stack<TileEntityModularStorage>();
+            TileEntityModularStorage master = this;
+            traversingStorages.add(this);
+            while(!traversingStorages.isEmpty()) {
+                TileEntityModularStorage storage = traversingStorages.pop();
+                if(storage.isMaster()) {
+                    master = storage;
+                }
+                connectedStorages.add(storage);
+                for(ForgeDirection d : ForgeDirection.VALID_DIRECTIONS) {
+                    TileEntity te = worldObj.getTileEntity(storage.xCoord + d.offsetX, storage.yCoord + d.offsetY, storage.zCoord + d.offsetZ);
+                    if(te instanceof TileEntityModularStorage && !connectedStorages.contains(te)) {
+                        traversingStorages.add((TileEntityModularStorage)te);
+                    }
+                }
+            }
+            Log.info("Setting master to " + master.xCoord + ", " + master.yCoord + ", " + master.zCoord + " for " + connectedStorages.size() + " blocks");
+            for(TileEntityModularStorage storage : connectedStorages) {
+                storage.setMaster(master, connectedStorages.size());
+            }
+        }
     }
 
     @Override
@@ -32,12 +121,14 @@ public class TileEntityModularStorage extends TileEntityAdvancedMod implements I
     @Override
     public void readFromPacket(ByteBuf buf){
 
-        worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+        //   worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag){
         super.readFromNBT(tag);
+
+        isMaster = tag.getBoolean("isMaster");
 
         inventory = new ItemStack[tag.getInteger("slots")];
         NBTTagList camoStackTag = tag.getTagList("inventory", 10);
@@ -54,6 +145,8 @@ public class TileEntityModularStorage extends TileEntityAdvancedMod implements I
     @Override
     public void writeToNBT(NBTTagCompound tag){
         super.writeToNBT(tag);
+
+        tag.setBoolean("isMaster", isMaster);
 
         tag.setInteger("slots", inventory.length);
         NBTTagList camoStackTag = new NBTTagList();
@@ -74,7 +167,7 @@ public class TileEntityModularStorage extends TileEntityAdvancedMod implements I
      */
     @Override
     public int getSizeInventory(){
-        return inventory.length;
+        return isMaster() ? inventory.length : getMaster().getSizeInventory();
     }
 
     /**
@@ -82,7 +175,7 @@ public class TileEntityModularStorage extends TileEntityAdvancedMod implements I
      */
     @Override
     public ItemStack getStackInSlot(int slot){
-        return inventory[slot];
+        return isMaster ? inventory[slot] : getMaster().getStackInSlot(slot);
     }
 
     /**
@@ -91,26 +184,30 @@ public class TileEntityModularStorage extends TileEntityAdvancedMod implements I
      */
     @Override
     public ItemStack decrStackSize(int slot, int decreaseAmount){
-        if(inventory[slot] != null) {
-            ItemStack itemstack;
+        if(isMaster()) {
+            if(inventory[slot] != null) {
+                ItemStack itemstack;
 
-            if(inventory[slot].stackSize <= decreaseAmount) {
-                itemstack = inventory[slot];
-                setInventorySlotContents(slot, null);
-                markDirty();
-                return itemstack;
-            } else {
-                itemstack = inventory[slot].splitStack(decreaseAmount);
-
-                if(inventory[slot].stackSize == 0) {
+                if(inventory[slot].stackSize <= decreaseAmount) {
+                    itemstack = inventory[slot];
                     setInventorySlotContents(slot, null);
-                }
+                    markDirty();
+                    return itemstack;
+                } else {
+                    itemstack = inventory[slot].splitStack(decreaseAmount);
 
-                markDirty();
-                return itemstack;
+                    if(inventory[slot].stackSize == 0) {
+                        setInventorySlotContents(slot, null);
+                    }
+
+                    markDirty();
+                    return itemstack;
+                }
+            } else {
+                return null;
             }
         } else {
-            return null;
+            return getMaster().decrStackSize(slot, decreaseAmount);
         }
     }
 
@@ -120,12 +217,16 @@ public class TileEntityModularStorage extends TileEntityAdvancedMod implements I
      */
     @Override
     public ItemStack getStackInSlotOnClosing(int slot){
-        if(inventory[slot] != null) {
-            ItemStack itemstack = inventory[slot];
-            inventory[slot] = null;
-            return itemstack;
+        if(isMaster()) {
+            if(inventory[slot] != null) {
+                ItemStack itemstack = inventory[slot];
+                inventory[slot] = null;
+                return itemstack;
+            } else {
+                return null;
+            }
         } else {
-            return null;
+            return getMaster().getStackInSlotOnClosing(slot);
         }
     }
 
@@ -134,13 +235,17 @@ public class TileEntityModularStorage extends TileEntityAdvancedMod implements I
      */
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack){
-        inventory[slot] = stack;
+        if(isMaster()) {
+            inventory[slot] = stack;
 
-        if(stack != null && stack.stackSize > getInventoryStackLimit()) {
-            stack.stackSize = getInventoryStackLimit();
+            if(stack != null && stack.stackSize > getInventoryStackLimit()) {
+                stack.stackSize = getInventoryStackLimit();
+            }
+
+            markDirty();
+        } else {
+            getMaster().setInventorySlotContents(slot, stack);
         }
-
-        markDirty();
     }
 
     /**

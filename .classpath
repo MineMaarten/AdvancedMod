@@ -3,8 +3,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="src" path="api"/>
 	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" path="src/api"/>
 	<classpathentry kind="lib" path="C:/Users/Maarten/.gradle/caches/modules-2/files-2.1/codechicken/CodeChickenCore/1.7.10-1.0.4.35/b7165acdf6b414123d49bde2c9a92561cc33c669/CodeChickenCore-1.7.10-1.0.4.35-dev.jar" exported="true"/>
 	<classpathentry sourcepath="C:/Users/Maarten/.gradle/caches/modules-2/files-2.1/mcp.mobius.waila/Waila/1.5.10_1.7.10/9edfa5c1ec1cbc86f9610b52258d170905fbda77/Waila-1.5.10_1.7.10-sources.jar" kind="lib" path="C:/Users/Maarten/.gradle/caches/modules-2/files-2.1/mcp.mobius.waila/Waila/1.5.10_1.7.10/7a874ee79a88cf66bd5355c8393069b3ac39c631/Waila-1.5.10_1.7.10.jar" exported="true"/>
 	<classpathentry sourcepath="C:/Users/Maarten/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.2.1264/forgeSrc-1.7.10-10.13.2.1264-sources.jar" kind="lib" path="C:/Users/Maarten/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.2.1264/forgeSrc-1.7.10-10.13.2.1264.jar" exported="true"/>
