@@ -1,6 +1,7 @@
 tile.dutchFlag.name=Dutch Flag
 tile.camoMine.name=Camo Mine
 tile.modularStorage.name=Modular Storage
+tile.treeFarm.name=Tree Farm
 
 key.categories.advancedMod=Advanced Mod
 key.advancedMod.explode=Explode
