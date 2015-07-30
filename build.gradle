@@ -33,7 +33,7 @@ group= "com.minemaarten.advancedmod" // http://maven.apache.org/guides/mini/guid
 archivesBaseName = "AdvancedMod"
 
 minecraft {
-    version = "1.7.10-10.13.2.1264"
+    version = "1.7.10-10.13.3.1388-1.7.10"
     runDir = "eclipse"
 }
 
@@ -51,9 +51,9 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-	compile "codechicken:CodeChickenLib:1.7.10-1.1.1.95:dev"
-	compile "codechicken:CodeChickenCore:1.7.10-1.0.4.35:dev"
-	compile "codechicken:NotEnoughItems:1.7.10-1.0.4.94:dev"
+	compile "codechicken:CodeChickenLib:1.7.10-1.1.3.136:dev"
+	compile "codechicken:CodeChickenCore:1.7.10-1.0.6.43:dev"
+	compile "codechicken:NotEnoughItems:1.7.10-1.0.4.107:dev"
 	compile "mcp.mobius.waila:Waila:1.5.10_1.7.10"
 }
 
@@ -91,5 +91,11 @@ processResources
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+jar {
+    manifest {
+        attributes 'FMLAT': 'advancedMod_at.cfg'
     }
 }

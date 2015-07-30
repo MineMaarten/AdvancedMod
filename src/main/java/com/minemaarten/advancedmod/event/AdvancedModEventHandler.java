@@ -1,20 +1,25 @@
 package com.minemaarten.advancedmod.event;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 
 import com.minemaarten.advancedmod.init.ModBlocks;
+import com.minemaarten.advancedmod.utility.Log;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 
 public class AdvancedModEventHandler{
@@ -46,6 +51,20 @@ public class AdvancedModEventHandler{
                     entity.motionY = 1;
                     entity.motionZ = 0;
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onCreeperSpawn(EntityJoinWorldEvent event){
+        if(event.entity instanceof EntityCreeper) {
+            ((EntityCreeper)event.entity).explosionRadius = 0;
+            try {
+                Field field = ReflectionHelper.findField(EntityCreeper.class, "field_82225_f", "fuseTime");
+                field.set(event.entity, 80);
+            } catch(Throwable e) {
+                Log.warn("Reflection on Creeper fuseTime failed!");
+                e.printStackTrace();
             }
         }
     }
